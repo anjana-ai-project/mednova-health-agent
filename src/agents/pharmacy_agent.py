@@ -1,54 +1,62 @@
-import sys
-from pathlib import Path
-from dotenv import load_dotenv
-load_dotenv()
+from src.mcp_servers.mednova_server import (
+    get_medicine_by_id,
+    get_medicines_by_category,
+    check_medicine_stock,
+    get_low_stock_medicines,
+)
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+DOMAIN = "pharmacy"
+SOURCES = ["pharmacy.db"]
 
-import json
-import sqlite3
-import anthropic
-
-MODEL = "claude-haiku-4-5-20251001"
-ROOT = Path(__file__).resolve().parents[2]
-DB_PATH = str(ROOT / "src" / "database" / "pharmacy.db")
-
-def query_pharmacy_db() -> list:
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM medicines")
-    rows = cursor.fetchall()
-    conn.close()
-    return [dict(row) for row in rows]
-
-def pharmacy_agent(question: str) -> dict:
-    """Answers pharmacy and medicine queries using SQLite pharmacy database."""
-    medicines = query_pharmacy_db()
-    context = json.dumps(medicines, indent=2)
-    client = anthropic.Anthropic()
-    response = client.messages.create(
-        model=MODEL,
-        max_tokens=1024,
-        system=(
-            "You are a pharmacy information assistant for MedNova Hospital Chennai. "
-            "You have access to the pharmacy medicine database. "
-            "Answer the user's question using only the provided medicine data. "
-            "Be concise and accurate about stock, pricing, and availability."
-        ),
-        messages=[
-            {
-                "role": "user",
-                "content": f"Pharmacy database:\n\n{context}\n\nQuestion: {question}"
-            }
-        ]
-    )
-    return {
-        "answer": response.content[0].text,
-        "sources": ["pharmacy.db"],
-        "agent": "pharmacy_agent"
+TOOLS = [
+    {
+        "name": "get_medicine_by_id",
+        "description": "Get full medicine details (name, category, stock, price, supplier, expiry) by medicine ID like M001.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "medicine_id": {"type": "string", "description": "Medicine ID, e.g. 'M001'"}
+            },
+            "required": ["medicine_id"]
+        }
+    },
+    {
+        "name": "get_medicines_by_category",
+        "description": "List medicines in a category such as 'Antidiabetic', 'Antibiotic', 'Analgesic', 'Antihypertensive', 'Antacid', 'Statin', or 'Bronchodilator'.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "category": {"type": "string", "description": "Medicine category"}
+            },
+            "required": ["category"]
+        }
+    },
+    {
+        "name": "check_medicine_stock",
+        "description": "Check current stock quantity, price, expiry, and availability for a specific medicine by name (e.g. 'Insulin Glargine').",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "medicine_name": {"type": "string", "description": "Medicine name or partial name"}
+            },
+            "required": ["medicine_name"]
+        }
+    },
+    {
+        "name": "get_low_stock_medicines",
+        "description": "List all medicines with stock below 100 units — useful for restocking and shortage queries.",
+        "input_schema": {"type": "object", "properties": {}}
     }
+]
 
-if __name__ == "__main__":
-    result = pharmacy_agent("Which medicines are low on stock?")
-    print(result["answer"])
+TOOL_FUNCTIONS = {
+    "get_medicine_by_id": get_medicine_by_id,
+    "get_medicines_by_category": get_medicines_by_category,
+    "check_medicine_stock": check_medicine_stock,
+    "get_low_stock_medicines": get_low_stock_medicines,
+}
+
+
+def dispatch(tool_name: str, tool_input: dict):
+    """Execute one of this agent's tools and return the raw result."""
+    return TOOL_FUNCTIONS[tool_name](**tool_input)

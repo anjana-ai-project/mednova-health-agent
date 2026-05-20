@@ -1,57 +1,62 @@
-import sys
-from pathlib import Path
-from dotenv import load_dotenv
-load_dotenv()
+from src.mcp_servers.mednova_server import (
+    get_patient_by_id,
+    get_all_patients,
+    get_patients_by_doctor,
+    get_patients_by_ward,
+)
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+DOMAIN = "patient"
+SOURCES = ["patient.db"]
 
-import json
-import sqlite3
-import anthropic
-
-MODEL = "claude-haiku-4-5-20251001"
-ROOT = Path(__file__).resolve().parents[2]
-DB_PATH = str(ROOT / "src" / "database" / "patient.db")
-
-def query_patient_db(question: str) -> list:
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM patients")
-    rows = cursor.fetchall()
-    conn.close()
-    return [dict(row) for row in rows]
-
-def patient_agent(question: str) -> dict:
-    """Answers patient-related queries using SQLite patient database."""
-    patients = query_patient_db(question)
-
-    context = json.dumps(patients, indent=2)
-
-    client = anthropic.Anthropic()
-    response = client.messages.create(
-        model=MODEL,
-        max_tokens=1024,
-        system=(
-            "You are a hospital information assistant for MedNova Hospital Chennai. "
-            "You have access to the patient database. "
-            "Answer the user's question using only the provided patient data. "
-            "Be concise and accurate. Protect patient privacy — share only what is asked."
-        ),
-        messages=[
-            {
-                "role": "user",
-                "content": f"Patient database:\n\n{context}\n\nQuestion: {question}"
-            }
-        ]
-    )
-
-    return {
-        "answer": response.content[0].text,
-        "sources": ["patient.db"],
-        "agent": "patient_agent"
+TOOLS = [
+    {
+        "name": "get_patient_by_id",
+        "description": "Get full patient details (name, age, disease, attending doctor, ward, admission/discharge dates) by patient ID like P001.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "patient_id": {"type": "string", "description": "Patient ID, e.g. 'P001'"}
+            },
+            "required": ["patient_id"]
+        }
+    },
+    {
+        "name": "get_all_patients",
+        "description": "List every currently admitted patient with disease, attending doctor, and ward.",
+        "input_schema": {"type": "object", "properties": {}}
+    },
+    {
+        "name": "get_patients_by_doctor",
+        "description": "List patients under a specific attending doctor's care.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "doctor_name": {"type": "string", "description": "Doctor's name, e.g. 'Priya Nair' or 'Dr. Arun Menon'"}
+            },
+            "required": ["doctor_name"]
+        }
+    },
+    {
+        "name": "get_patients_by_ward",
+        "description": "List all patients in a specific ward (e.g. 'Cardiology', 'General', 'Surgery', 'Orthopaedics', 'Urology').",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "ward": {"type": "string", "description": "Ward name"}
+            },
+            "required": ["ward"]
+        }
     }
+]
 
-if __name__ == "__main__":
-    result = patient_agent("Which patients are in the Cardiology ward?")
-    print(result["answer"])
+TOOL_FUNCTIONS = {
+    "get_patient_by_id": get_patient_by_id,
+    "get_all_patients": get_all_patients,
+    "get_patients_by_doctor": get_patients_by_doctor,
+    "get_patients_by_ward": get_patients_by_ward,
+}
+
+
+def dispatch(tool_name: str, tool_input: dict):
+    """Execute one of this agent's tools and return the raw result."""
+    return TOOL_FUNCTIONS[tool_name](**tool_input)

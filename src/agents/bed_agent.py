@@ -1,54 +1,56 @@
-import sys
-from pathlib import Path
-from dotenv import load_dotenv
-load_dotenv()
+from src.mcp_servers.mednova_server import (
+    get_bed_status,
+    get_available_beds,
+    get_beds_by_ward,
+    get_bed_occupancy_summary,
+)
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+DOMAIN = "bed"
+SOURCES = ["bed.db"]
 
-import json
-import sqlite3
-import anthropic
-
-MODEL = "claude-haiku-4-5-20251001"
-ROOT = Path(__file__).resolve().parents[2]
-DB_PATH = str(ROOT / "src" / "database" / "bed.db")
-
-def query_bed_db() -> list:
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM beds")
-    rows = cursor.fetchall()
-    conn.close()
-    return [dict(row) for row in rows]
-
-def bed_agent(question: str) -> dict:
-    """Answers bed availability queries using SQLite bed database."""
-    beds = query_bed_db()
-    context = json.dumps(beds, indent=2)
-    client = anthropic.Anthropic()
-    response = client.messages.create(
-        model=MODEL,
-        max_tokens=1024,
-        system=(
-            "You are a bed management assistant for MedNova Hospital Chennai. "
-            "You have access to the bed availability database. "
-            "Answer the user's question using only the provided bed data. "
-            "Be concise and accurate about bed availability, ward, and floor."
-        ),
-        messages=[
-            {
-                "role": "user",
-                "content": f"Bed database:\n\n{context}\n\nQuestion: {question}"
-            }
-        ]
-    )
-    return {
-        "answer": response.content[0].text,
-        "sources": ["bed.db"],
-        "agent": "bed_agent"
+TOOLS = [
+    {
+        "name": "get_bed_status",
+        "description": "Get the status (Available/Occupied), ward, floor, and assigned patient of a bed by bed ID like B001.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "bed_id": {"type": "string", "description": "Bed ID, e.g. 'B001'"}
+            },
+            "required": ["bed_id"]
+        }
+    },
+    {
+        "name": "get_available_beds",
+        "description": "List every currently available (unoccupied) bed across the hospital, with ward and floor.",
+        "input_schema": {"type": "object", "properties": {}}
+    },
+    {
+        "name": "get_beds_by_ward",
+        "description": "List all beds in a given ward with their status and assigned patient.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "ward": {"type": "string", "description": "Ward name, e.g. 'Cardiology'"}
+            },
+            "required": ["ward"]
+        }
+    },
+    {
+        "name": "get_bed_occupancy_summary",
+        "description": "Hospital-wide bed occupancy summary: total beds, occupied count, available count, occupancy rate.",
+        "input_schema": {"type": "object", "properties": {}}
     }
+]
 
-if __name__ == "__main__":
-    result = bed_agent("Which beds are available right now?")
-    print(result["answer"])
+TOOL_FUNCTIONS = {
+    "get_bed_status": get_bed_status,
+    "get_available_beds": get_available_beds,
+    "get_beds_by_ward": get_beds_by_ward,
+    "get_bed_occupancy_summary": get_bed_occupancy_summary,
+}
+
+
+def dispatch(tool_name: str, tool_input: dict):
+    """Execute one of this agent's tools and return the raw result."""
+    return TOOL_FUNCTIONS[tool_name](**tool_input)

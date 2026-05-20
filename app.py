@@ -3,6 +3,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import streamlit as st
+import uuid
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -18,11 +19,19 @@ st.set_page_config(
 st.title("MedNova Hospital Chennai")
 st.subheader("AI Health Assistant")
 
+if "thread_id" not in st.session_state:
+    st.session_state.thread_id = str(uuid.uuid4())
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-if "chat_history" not in st.session_state:
-    st.session_state.chat_history = []
+with st.sidebar:
+    st.markdown("### Session Info")
+    st.code(st.session_state.thread_id[:8] + "...")
+    if st.button("New Conversation"):
+        st.session_state.thread_id = str(uuid.uuid4())
+        st.session_state.messages = []
+        st.rerun()
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
@@ -35,7 +44,7 @@ if prompt := st.chat_input("Ask about patients, beds, medicines, appointments, o
 
     with st.chat_message("assistant"):
         with st.spinner("MedNova AI is thinking..."):
-            result = ask(prompt, chat_history=st.session_state.chat_history)
+            result = ask(prompt, thread_id=st.session_state.thread_id)
             answer = result["answer"]
             agent_route = result["agent_route"]
             sources = result["sources"]
@@ -54,5 +63,3 @@ if prompt := st.chat_input("Ask about patients, beds, medicines, appointments, o
             st.write(f"Feedback: {scores.get('feedback', '')}")
 
     st.session_state.messages.append({"role": "assistant", "content": answer})
-    st.session_state.chat_history.append({"role": "user", "content": prompt})
-    st.session_state.chat_history.append({"role": "assistant", "content": answer})

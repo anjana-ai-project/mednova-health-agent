@@ -1,54 +1,75 @@
-import sys
-from pathlib import Path
-from dotenv import load_dotenv
-load_dotenv()
+from src.mcp_servers.mednova_server import (
+    get_appointment_by_id,
+    get_appointments_by_doctor,
+    get_appointments_by_date,
+    get_available_slots,
+    get_appointments_by_patient,
+)
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+DOMAIN = "scheduling"
+SOURCES = ["scheduling.db"]
 
-import json
-import sqlite3
-import anthropic
-
-MODEL = "claude-haiku-4-5-20251001"
-ROOT = Path(__file__).resolve().parents[2]
-DB_PATH = str(ROOT / "src" / "database" / "scheduling.db")
-
-def query_scheduling_db() -> list:
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM appointments")
-    rows = cursor.fetchall()
-    conn.close()
-    return [dict(row) for row in rows]
-
-def scheduling_agent(question: str) -> dict:
-    """Answers appointment and scheduling queries using SQLite scheduling database."""
-    appointments = query_scheduling_db()
-    context = json.dumps(appointments, indent=2)
-    client = anthropic.Anthropic()
-    response = client.messages.create(
-        model=MODEL,
-        max_tokens=1024,
-        system=(
-            "You are a scheduling assistant for MedNova Hospital Chennai. "
-            "You have access to the doctor appointments database. "
-            "Answer the user's question using only the provided appointment data. "
-            "Be concise and accurate about doctor availability and appointment slots."
-        ),
-        messages=[
-            {
-                "role": "user",
-                "content": f"Scheduling database:\n\n{context}\n\nQuestion: {question}"
-            }
-        ]
-    )
-    return {
-        "answer": response.content[0].text,
-        "sources": ["scheduling.db"],
-        "agent": "scheduling_agent"
+TOOLS = [
+    {
+        "name": "get_appointment_by_id",
+        "description": "Get appointment details (patient, doctor, specialization, date, time, status) by appointment ID like A001.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "appointment_id": {"type": "string", "description": "Appointment ID, e.g. 'A001'"}
+            },
+            "required": ["appointment_id"]
+        }
+    },
+    {
+        "name": "get_appointments_by_doctor",
+        "description": "List a doctor's appointments (patient, date, time, status).",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "doctor_name": {"type": "string", "description": "Doctor's name, e.g. 'Priya Nair'"}
+            },
+            "required": ["doctor_name"]
+        }
+    },
+    {
+        "name": "get_appointments_by_date",
+        "description": "List every appointment scheduled on a specific date (YYYY-MM-DD).",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "appointment_date": {"type": "string", "description": "Date in YYYY-MM-DD format"}
+            },
+            "required": ["appointment_date"]
+        }
+    },
+    {
+        "name": "get_available_slots",
+        "description": "List every currently bookable appointment slot — doctor, specialization, date, time.",
+        "input_schema": {"type": "object", "properties": {}}
+    },
+    {
+        "name": "get_appointments_by_patient",
+        "description": "List a patient's appointments (upcoming or past) by patient name.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "patient_name": {"type": "string", "description": "Patient name, e.g. 'Rajesh Kumar'"}
+            },
+            "required": ["patient_name"]
+        }
     }
+]
 
-if __name__ == "__main__":
-    result = scheduling_agent("What slots are available with Dr. Arun Menon?")
-    print(result["answer"])
+TOOL_FUNCTIONS = {
+    "get_appointment_by_id": get_appointment_by_id,
+    "get_appointments_by_doctor": get_appointments_by_doctor,
+    "get_appointments_by_date": get_appointments_by_date,
+    "get_available_slots": get_available_slots,
+    "get_appointments_by_patient": get_appointments_by_patient,
+}
+
+
+def dispatch(tool_name: str, tool_input: dict):
+    """Execute one of this agent's tools and return the raw result."""
+    return TOOL_FUNCTIONS[tool_name](**tool_input)
