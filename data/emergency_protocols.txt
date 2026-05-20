@@ -1,0 +1,63 @@
+MedNova Hospital Chennai — Emergency Department Protocols
+
+Emergency Department Overview
+The MedNova Emergency Department operates 24 hours a day, 7 days a week,
+with a dedicated team of emergency physicians, nurses, and support staff.
+The department has 20 acute care bays, 4 resuscitation bays, and a 6-bed
+short-stay observation unit. The ED is supported by an in-house trauma team,
+on-call surgical and medical specialists, and round-the-clock radiology and
+laboratory services.
+
+Triage Protocol
+All patients arriving at the Emergency Department are triaged within 5
+minutes of arrival using a 5-level acuity scale.
+Level 1 — Resuscitation, immediate care, life-threatening conditions.
+Level 2 — Emergent, care within 10 minutes, high-risk conditions.
+Level 3 — Urgent, care within 30 minutes, stable but concerning conditions.
+Level 4 — Less urgent, care within 60 minutes.
+Level 5 — Non-urgent, care within 120 minutes.
+
+Trauma Activation Criteria
+A full trauma team activation is called for patients with systolic blood
+pressure below 90 mmHg, GCS less than 9, penetrating injury to head/neck/
+torso/proximal extremities, gunshot wounds, fall from height greater than
+6 metres, or paralysis. The trauma team responds within 5 minutes and
+includes a trauma surgeon, ED physician, anaesthetist, and trauma nurses.
+
+Stroke Protocol
+Step 1 — Suspected stroke patient is triaged as Level 1.
+Step 2 — Stroke team is paged immediately on arrival.
+Step 3 — Non-contrast CT brain is performed within 25 minutes of arrival.
+Step 4 — Neurologist reviews imaging and patient within 45 minutes.
+Step 5 — IV thrombolysis is administered within 60 minutes of arrival if
+indicated and within the 4.5-hour window.
+Step 6 — Mechanical thrombectomy is considered for large vessel occlusion
+within 6 hours of symptom onset.
+
+Sepsis Protocol
+Patients meeting SIRS criteria with suspected infection are screened for
+sepsis. The sepsis bundle is initiated within 1 hour: blood cultures before
+antibiotics, broad-spectrum IV antibiotics, IV crystalloid 30 ml/kg for
+hypotension or lactate above 4 mmol/L, serum lactate measurement, and
+vasopressors for persistent hypotension.
+
+Cardiac Arrest Protocol
+Code Blue is announced overhead and the resuscitation team responds within
+2 minutes. CPR follows the current AHA Advanced Cardiac Life Support
+guidelines. The crash cart is brought to the bedside, and a recorder
+documents all interventions, medications, and rhythm changes. Post-arrest
+care includes targeted temperature management for unconscious survivors.
+
+Disaster and Mass Casualty Plan
+The MedNova ED activates the Hospital Incident Command System for mass
+casualty events. Triage shifts to the START protocol (Simple Triage and
+Rapid Treatment). Additional staff are recalled, elective surgeries are
+postponed, and inpatient beds are made available through expedited
+discharges.
+
+Emergency Contacts
+ED main desk: extension 1100
+Triage nurse: extension 1105
+Trauma team activation: extension 1110
+Code Blue: extension 9999
+Stroke team: extension 1120

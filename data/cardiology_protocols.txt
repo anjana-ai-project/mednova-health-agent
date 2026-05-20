@@ -1,0 +1,43 @@
+MedNova Hospital Chennai — Cardiology Protocols
+
+Cardiology Department Overview
+The Cardiology department at MedNova Hospital Chennai provides comprehensive
+cardiac care including diagnostic, interventional, and rehabilitative services.
+The department operates a 24-hour Chest Pain Unit and a dedicated Cardiac ICU
+with 10 beds.
+
+Heart Attack Protocol
+Step 1 — Patient presenting with chest pain is triaged immediately.
+Step 2 — 12-lead ECG is performed within 10 minutes of arrival.
+Step 3 — Cardiac biomarkers including Troponin I and CK-MB are drawn.
+Step 4 — Aspirin 325mg is administered if not contraindicated.
+Step 5 — Cardiologist is notified within 15 minutes of ECG confirmation.
+Step 6 — Primary PCI is performed within 90 minutes of first medical contact.
+
+Cardiac ICU Admission Criteria
+Patients admitted to the Cardiac ICU include those with acute myocardial
+infarction, unstable angina with haemodynamic compromise, life-threatening
+arrhythmias, acute heart failure with pulmonary oedema, post cardiac arrest,
+and post cardiac surgery requiring monitoring.
+
+Echocardiography Services
+Transthoracic echocardiography is available Monday to Saturday 8AM to 6PM.
+Emergency echocardiography is available 24 hours via on-call technician.
+Transesophageal echocardiography requires prior appointment and anaesthesia
+clearance. Results are reported by a cardiologist within 2 hours for emergency
+studies and 24 hours for routine studies.
+
+Cardiac Rehabilitation
+MedNova offers a structured 12-week cardiac rehabilitation programme for
+patients following heart attack, bypass surgery, or heart failure.
+Sessions are conducted three times per week in the physiotherapy department.
+Each session includes supervised exercise, dietary counselling, and
+psychological support.
+
+Common Cardiology Medications at MedNova
+Aspirin — antiplatelet therapy for all CAD patients.
+Clopidogrel — dual antiplatelet therapy post PCI.
+Atorvastatin — lipid lowering for all cardiac patients.
+Metoprolol — beta blocker for heart failure and post MI.
+Ramipril — ACE inhibitor for heart failure and hypertension.
+Furosemide — diuretic for fluid overload in heart failure.

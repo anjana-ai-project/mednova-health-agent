@@ -1,0 +1,11 @@
+anthropic
+langchain
+langchain-anthropic
+langchain-text-splitters
+langgraph
+chromadb
+sentence-transformers
+fastmcp
+streamlit
+ragas
+python-dotenv

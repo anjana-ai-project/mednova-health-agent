@@ -1,0 +1,35 @@
+MedNova Hospital Chennai — ICU Procedures and Protocols
+
+ICU Admission Criteria
+Patients requiring ICU admission include those with acute respiratory failure,
+haemodynamic instability, post-operative monitoring after major surgery,
+severe sepsis or septic shock, acute neurological emergencies, and multi-organ
+dysfunction syndrome.
+
+ICU Discharge Criteria
+A patient is considered ready for ICU discharge when haemodynamic stability
+is achieved without vasopressor support, oxygen saturation is maintained above
+95% on low-flow oxygen, the patient is alert and oriented, and urine output
+exceeds 0.5ml/kg/hour for 6 consecutive hours.
+
+ICU Discharge Procedure
+Step 1 — Attending physician issues discharge order after ward round assessment.
+Step 2 — ICU nurse completes transfer summary including vitals, medications,
+and nursing notes.
+Step 3 — Receiving ward is notified at least 2 hours before transfer.
+Step 4 — Patient is transferred with continuous monitoring until handover.
+Step 5 — Receiving ward nurse signs handover checklist.
+Step 6 — ICU bed is sanitised and prepared for next admission within 1 hour.
+
+Visiting Hours — ICU
+Visiting hours in the ICU are restricted to 10:00 AM to 11:00 AM and
+5:00 PM to 6:00 PM daily. Maximum 2 visitors per patient. Children below
+12 years are not permitted in the ICU. Visitors must wear PPE provided
+at the ICU entrance.
+
+ICU Infection Control
+All staff must perform hand hygiene before and after patient contact.
+Ventilator bundles are implemented for all intubated patients.
+Central line bundles are followed for all central venous catheters.
+Daily sedation vacations and spontaneous breathing trials are conducted
+for ventilated patients.
