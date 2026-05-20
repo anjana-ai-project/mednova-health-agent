@@ -6,8 +6,11 @@ load_dotenv()
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 import anthropic
-from typing import TypedDict
+from typing import TypedDict, Annotated
 from langgraph.graph import StateGraph, END
+from langgraph.checkpoint.memory import MemorySaver
+from langgraph.graph.message import add_messages
+from langchain_core.messages import HumanMessage, AIMessage
 
 from src.agents.rag_agent import rag_agent
 from src.agents.patient_agent import patient_agent
@@ -18,6 +21,7 @@ from src.agents.scheduling_agent import scheduling_agent
 MODEL = "claude-haiku-4-5-20251001"
 
 class MedNovaState(TypedDict):
+    messages: Annotated[list, add_messages]
     question: str
     agent_route: str
     answer: str
@@ -25,8 +29,16 @@ class MedNovaState(TypedDict):
     eval_scores: dict
 
 def route_question(state: MedNovaState) -> MedNovaState:
-    """Uses Claude Haiku to classify the question and route to the correct agent."""
     question = state["question"]
+    history = state.get("messages", [])
+
+    history_text = ""
+    if history:
+        history_text = "\n".join([
+            f"{'User' if isinstance(m, HumanMessage) else 'Assistant'}: {m.content}"
+            for m in history[-6:]
+        ])
+
     client = anthropic.Anthropic()
     response = client.messages.create(
         model=MODEL,
@@ -40,9 +52,15 @@ def route_question(state: MedNovaState) -> MedNovaState:
             "scheduling — appointment, schedule, doctor slot, booking. "
             "patient — patient details, admitted, discharge, age, disease. "
             "rag — policy, procedure, protocol, visiting hours, ICU, general hospital info. "
+            "Use the conversation history to understand follow-up messages like yes, no, book it, confirm. "
             "Reply with only the category word. Nothing else."
         ),
-        messages=[{"role": "user", "content": question}]
+        messages=[
+            {
+                "role": "user",
+                "content": f"Conversation history:\n{history_text}\n\nCurrent message: {question}"
+            }
+        ]
     )
     route = response.content[0].text.strip().lower()
     if route not in ["pharmacy", "bed", "scheduling", "patient", "rag"]:
@@ -50,29 +68,50 @@ def route_question(state: MedNovaState) -> MedNovaState:
     print(f"Routed to: {route}")
     return {**state, "agent_route": route}
 
+def build_agent_prompt(question: str, state: MedNovaState) -> str:
+    history = state.get("messages", [])
+    if not history:
+        return question
+    history_text = "\n".join([
+        f"{'User' if isinstance(m, HumanMessage) else 'Assistant'}: {m.content}"
+        for m in history[-6:]
+    ])
+    return f"Conversation history:\n{history_text}\n\nCurrent question: {question}"
+
 def run_rag_agent(state: MedNovaState) -> MedNovaState:
-    result = rag_agent(state["question"])
-    return {**state, "answer": result["answer"], "sources": result["sources"]}
+    prompt = build_agent_prompt(state["question"], state)
+    result = rag_agent(prompt)
+    return {**state, "answer": result["answer"], "sources": result["sources"],
+            "messages": [AIMessage(content=result["answer"])]}
 
 def run_patient_agent(state: MedNovaState) -> MedNovaState:
-    result = patient_agent(state["question"])
-    return {**state, "answer": result["answer"], "sources": result["sources"]}
+    prompt = build_agent_prompt(state["question"], state)
+    result = patient_agent(prompt)
+    return {**state, "answer": result["answer"], "sources": result["sources"],
+            "messages": [AIMessage(content=result["answer"])]}
 
 def run_pharmacy_agent(state: MedNovaState) -> MedNovaState:
-    result = pharmacy_agent(state["question"])
-    return {**state, "answer": result["answer"], "sources": result["sources"]}
+    prompt = build_agent_prompt(state["question"], state)
+    result = pharmacy_agent(prompt)
+    return {**state, "answer": result["answer"], "sources": result["sources"],
+            "messages": [AIMessage(content=result["answer"])]}
 
 def run_bed_agent(state: MedNovaState) -> MedNovaState:
-    result = bed_agent(state["question"])
-    return {**state, "answer": result["answer"], "sources": result["sources"]}
+    prompt = build_agent_prompt(state["question"], state)
+    result = bed_agent(prompt)
+    return {**state, "answer": result["answer"], "sources": result["sources"],
+            "messages": [AIMessage(content=result["answer"])]}
 
 def run_scheduling_agent(state: MedNovaState) -> MedNovaState:
-    result = scheduling_agent(state["question"])
-    return {**state, "answer": result["answer"], "sources": result["sources"]}
+    prompt = build_agent_prompt(state["question"], state)
+    result = scheduling_agent(prompt)
+    return {**state, "answer": result["answer"], "sources": result["sources"],
+            "messages": [AIMessage(content=result["answer"])]}
 
 def select_agent(state: MedNovaState) -> str:
-    """Conditional edge — returns which agent node to run next."""
     return state["agent_route"]
+
+memory = MemorySaver()
 
 def build_graph() -> StateGraph:
     graph = StateGraph(MedNovaState)
@@ -95,32 +134,21 @@ def build_graph() -> StateGraph:
     graph.add_edge("pharmacy", END)
     graph.add_edge("bed", END)
     graph.add_edge("scheduling", END)
-    return graph.compile()
+    return graph.compile(checkpointer=memory)
 
-def ask(question: str) -> dict:
-    """Main entry point — takes a question and returns answer."""
-    graph = build_graph()
-    result = graph.invoke({
-        "question": question,
-        "agent_route": "",
-        "answer": "",
-        "sources": [],
-        "eval_scores": {}
-    })
+graph = build_graph()
+
+def ask(question: str, thread_id: str = "default") -> dict:
+    config = {"configurable": {"thread_id": thread_id}}
+    result = graph.invoke(
+        {
+            "question": question,
+            "agent_route": "",
+            "answer": "",
+            "sources": [],
+            "eval_scores": {},
+            "messages": [HumanMessage(content=question)]
+        },
+        config=config
+    )
     return result
-
-if __name__ == "__main__":
-    questions = [
-        "What are the ICU visiting hours?",
-        "Which patients are in the Cardiology ward?",
-        "Is Insulin Glargine available in pharmacy?",
-        "Which beds are available right now?",
-        "What appointments are available with Dr. Priya Nair?"
-    ]
-    for q in questions:
-        print(f"\nQuestion: {q}")
-        print("-" * 60)
-        result = ask(q)
-        print(result["answer"])
-        print(f"Sources: {result['sources']}")
-        print(f"Route: {result['agent_route']}")

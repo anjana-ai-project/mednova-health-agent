@@ -11,7 +11,7 @@ from src.evaluation.evaluator import evaluate_response
 
 st.set_page_config(
     page_title="MedNova Health Agent",
-    page_icon="hospital",
+    page_icon="🏥",
     layout="wide"
 )
 
@@ -20,6 +20,9 @@ st.subheader("AI Health Assistant")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
+
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
@@ -32,7 +35,7 @@ if prompt := st.chat_input("Ask about patients, beds, medicines, appointments, o
 
     with st.chat_message("assistant"):
         with st.spinner("MedNova AI is thinking..."):
-            result = ask(prompt)
+            result = ask(prompt, chat_history=st.session_state.chat_history)
             answer = result["answer"]
             agent_route = result["agent_route"]
             sources = result["sources"]
@@ -51,3 +54,5 @@ if prompt := st.chat_input("Ask about patients, beds, medicines, appointments, o
             st.write(f"Feedback: {scores.get('feedback', '')}")
 
     st.session_state.messages.append({"role": "assistant", "content": answer})
+    st.session_state.chat_history.append({"role": "user", "content": prompt})
+    st.session_state.chat_history.append({"role": "assistant", "content": answer})
