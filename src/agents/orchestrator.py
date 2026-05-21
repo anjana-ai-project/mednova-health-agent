@@ -84,6 +84,8 @@ class MedNovaState(TypedDict):
     answer: str
     sources: list
     eval_scores: dict
+    tool_name: str
+    tool_input: dict
 
 
 def run_turn(state: MedNovaState) -> MedNovaState:
@@ -158,6 +160,8 @@ def run_turn(state: MedNovaState) -> MedNovaState:
         "answer": answer,
         "sources": sources,
         "messages": [AIMessage(content=answer)],
+        "tool_name": tool_name,
+        "tool_input": tool_input,
     }
 
 
@@ -185,6 +189,8 @@ def ask(question: str, thread_id: str = "default") -> dict:
             "sources": [],
             "eval_scores": {},
             "messages": [HumanMessage(content=question)],
+            "tool_name": "",
+            "tool_input": {},
         },
         config=config,
     )

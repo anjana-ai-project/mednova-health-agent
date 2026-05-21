@@ -1,0 +1,122 @@
+[
+  {
+    "thread_id": "thread_appointment_booking",
+    "description": "User explores appointment slots, narrows to Dr. Arun Menon on May 23, then confirms.",
+    "turns": [
+      {
+        "question": "What appointment slots are currently available for booking?",
+        "expected_tool": "get_available_slots",
+        "context_from_turn": null,
+        "validation_keyword": "Arun Menon"
+      },
+      {
+        "question": "I'd like to book the one with Dr. Arun Menon on May 23.",
+        "expected_tool": "get_appointments_by_doctor",
+        "context_from_turn": 1,
+        "validation_keyword": "Arun Menon"
+      },
+      {
+        "question": "Yes, please confirm it.",
+        "expected_tool": "get_appointments_by_doctor",
+        "context_from_turn": 2,
+        "validation_keyword": "Arun Menon"
+      }
+    ]
+  },
+  {
+    "thread_id": "thread_bed_to_patient",
+    "description": "User asks about Cardiology beds, drills into bed C-201, then asks about that patient's disease.",
+    "turns": [
+      {
+        "question": "Which beds are in the Cardiology ward?",
+        "expected_tool": "get_beds_by_ward",
+        "context_from_turn": null,
+        "validation_keyword": "C-201"
+      },
+      {
+        "question": "Who is the patient in bed C-201?",
+        "expected_tool": "get_beds_by_ward",
+        "context_from_turn": 1,
+        "validation_keyword": "P002"
+      },
+      {
+        "question": "What disease does that patient have?",
+        "expected_tool": "get_patient_by_id",
+        "context_from_turn": 2,
+        "validation_keyword": "Hypertension"
+      }
+    ]
+  },
+  {
+    "thread_id": "thread_medicine_inquiry",
+    "description": "User checks Insulin Glargine availability, asks price, then asks expiry — all about same medicine.",
+    "turns": [
+      {
+        "question": "Is Insulin Glargine available in stock?",
+        "expected_tool": "check_medicine_stock",
+        "context_from_turn": null,
+        "validation_keyword": "Insulin Glargine"
+      },
+      {
+        "question": "What is its price?",
+        "expected_tool": "check_medicine_stock",
+        "context_from_turn": 1,
+        "validation_keyword": "450"
+      },
+      {
+        "question": "When does it expire?",
+        "expected_tool": "check_medicine_stock",
+        "context_from_turn": 2,
+        "validation_keyword": "2026-09-01"
+      }
+    ]
+  },
+  {
+    "thread_id": "thread_patient_to_doctor",
+    "description": "User looks up patient P002, asks about their attending doctor, then queries that doctor's appointments.",
+    "turns": [
+      {
+        "question": "Look up patient P002.",
+        "expected_tool": "get_patient_by_id",
+        "context_from_turn": null,
+        "validation_keyword": "Meena Sundaram"
+      },
+      {
+        "question": "Who is their attending doctor?",
+        "expected_tool": "get_patient_by_id",
+        "context_from_turn": 1,
+        "validation_keyword": "Arun Menon"
+      },
+      {
+        "question": "What appointments does that doctor have?",
+        "expected_tool": "get_appointments_by_doctor",
+        "context_from_turn": 2,
+        "validation_keyword": "2026-05-21"
+      }
+    ]
+  },
+  {
+    "thread_id": "thread_policy_inquiry",
+    "description": "User asks about ICU visiting hours, then children policy, then PPE — all from ICU procedures doc.",
+    "turns": [
+      {
+        "question": "What are the ICU visiting hours at MedNova?",
+        "expected_tool": "search_documents",
+        "context_from_turn": null,
+        "validation_keyword": "10:00"
+      },
+      {
+        "question": "Are children allowed in the ICU?",
+        "expected_tool": "search_documents",
+        "context_from_turn": 1,
+        "validation_keyword": "12"
+      },
+      {
+        "question": "What PPE is required for visitors?",
+        "expected_tool": "search_documents",
+        "context_from_turn": 2,
+        "validation_keyword": "PPE"
+      }
+    ]
+  }
+]

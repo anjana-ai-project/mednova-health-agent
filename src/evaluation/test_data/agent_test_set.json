@@ -1,0 +1,107 @@
+[
+  {
+    "question": "What ward is patient P002 in?",
+    "expected_tool": "get_patient_by_id",
+    "expected_params": {"patient_id": "P002"},
+    "expected_data_key": "Cardiology",
+    "domain": "patient"
+  },
+  {
+    "question": "List all currently admitted patients at MedNova.",
+    "expected_tool": "get_all_patients",
+    "expected_params": {},
+    "expected_data_key": "Rajesh Kumar",
+    "domain": "patient"
+  },
+  {
+    "question": "Which patients are under Dr. Priya Nair's care?",
+    "expected_tool": "get_patients_by_doctor",
+    "expected_params": {"doctor_name": "Priya Nair"},
+    "expected_data_key": "Rajesh Kumar",
+    "domain": "patient"
+  },
+  {
+    "question": "Show me patients in the Cardiology ward.",
+    "expected_tool": "get_patients_by_ward",
+    "expected_params": {"ward": "Cardiology"},
+    "expected_data_key": "Meena Sundaram",
+    "domain": "patient"
+  },
+  {
+    "question": "Get details for medicine M006.",
+    "expected_tool": "get_medicine_by_id",
+    "expected_params": {"medicine_id": "M006"},
+    "expected_data_key": "Insulin Glargine",
+    "domain": "pharmacy"
+  },
+  {
+    "question": "List all antibiotics available at the pharmacy.",
+    "expected_tool": "get_medicines_by_category",
+    "expected_params": {"category": "Antibiotic"},
+    "expected_data_key": "Azithromycin",
+    "domain": "pharmacy"
+  },
+  {
+    "question": "Is Insulin Glargine available in stock?",
+    "expected_tool": "check_medicine_stock",
+    "expected_params": {"medicine_name": "Insulin Glargine"},
+    "expected_data_key": "Insulin Glargine",
+    "domain": "pharmacy"
+  },
+  {
+    "question": "Which medicines are running low on stock?",
+    "expected_tool": "get_low_stock_medicines",
+    "expected_params": {},
+    "expected_data_key": "Salbutamol Inhaler",
+    "domain": "pharmacy"
+  },
+  {
+    "question": "What is the status of bed B007?",
+    "expected_tool": "get_bed_status",
+    "expected_params": {"bed_id": "B007"},
+    "expected_data_key": "Available",
+    "domain": "bed"
+  },
+  {
+    "question": "Show me all currently available beds.",
+    "expected_tool": "get_available_beds",
+    "expected_params": {},
+    "expected_data_key": "B002",
+    "domain": "bed"
+  },
+  {
+    "question": "List the beds in the Cardiology ward.",
+    "expected_tool": "get_beds_by_ward",
+    "expected_params": {"ward": "Cardiology"},
+    "expected_data_key": "C-201",
+    "domain": "bed"
+  },
+  {
+    "question": "Give me the overall bed occupancy summary for MedNova.",
+    "expected_tool": "get_bed_occupancy_summary",
+    "expected_params": {},
+    "expected_data_key": "occupancy_rate",
+    "domain": "bed"
+  },
+  {
+    "question": "What appointments does Dr. Priya Nair have?",
+    "expected_tool": "get_appointments_by_doctor",
+    "expected_params": {"doctor_name": "Priya Nair"},
+    "expected_data_key": "Rajesh Kumar",
+    "domain": "scheduling"
+  },
+  {
+    "question": "Show appointments scheduled on 2026-05-21.",
+    "expected_tool": "get_appointments_by_date",
+    "expected_params": {"appointment_date": "2026-05-21"},
+    "expected_data_key": "Rajesh Kumar",
+    "domain": "scheduling"
+  },
+  {
+    "question": "What appointment slots are currently available for booking?",
+    "expected_tool": "get_available_slots",
+    "expected_params": {},
+    "expected_data_key": "Dr. Arun Menon",
+    "domain": "scheduling"
+  }
+]

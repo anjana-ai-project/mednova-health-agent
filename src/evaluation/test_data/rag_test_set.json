@@ -1,0 +1,52 @@
+[
+  {
+    "question": "What are the ICU visiting hours at MedNova Hospital?",
+    "reference_answer": "ICU visiting hours are 10:00 AM to 11:00 AM and 5:00 PM to 6:00 PM daily, with a maximum of 2 visitors per patient. Children below 12 years are not permitted, and visitors must wear PPE provided at the ICU entrance.",
+    "expected_source": "icu_procedures.txt"
+  },
+  {
+    "question": "What are the criteria for discharging a patient from the ICU at MedNova?",
+    "reference_answer": "A patient is ready for ICU discharge when haemodynamic stability is achieved without vasopressor support, oxygen saturation is maintained above 95% on low-flow oxygen, the patient is alert and oriented, and urine output exceeds 0.5 ml/kg/hour for 6 consecutive hours.",
+    "expected_source": "icu_procedures.txt"
+  },
+  {
+    "question": "What are the OPD operating hours at MedNova?",
+    "reference_answer": "OPD services are available Monday to Saturday from 8:00 AM to 8:00 PM. Sunday OPD is available for emergency consultations only, from 9:00 AM to 1:00 PM.",
+    "expected_source": "patient_services.txt"
+  },
+  {
+    "question": "How can a patient book an appointment at MedNova?",
+    "reference_answer": "Online appointments can be booked via the MedNova patient portal or by calling the helpline at 044-2200-1000.",
+    "expected_source": "patient_services.txt"
+  },
+  {
+    "question": "What are the MedNova pharmacy operating hours?",
+    "reference_answer": "The main pharmacy at MedNova is open 24 hours, 7 days a week. The outpatient pharmacy counter is open from 8:00 AM to 10:00 PM. Emergency medicines are dispensed round the clock from the inpatient pharmacy.",
+    "expected_source": "pharmacy_services.txt"
+  },
+  {
+    "question": "How long is a MedNova prescription valid for?",
+    "reference_answer": "Prescriptions issued by MedNova registered doctors are valid for 30 days from the date of issue.",
+    "expected_source": "pharmacy_services.txt"
+  },
+  {
+    "question": "What is the door-to-balloon goal for heart attack patients at MedNova?",
+    "reference_answer": "Primary PCI is performed within 90 minutes of first medical contact. The full protocol includes 12-lead ECG within 10 minutes of arrival, cardiac biomarkers drawn, aspirin 325mg administered if not contraindicated, and cardiologist notified within 15 minutes of ECG confirmation.",
+    "expected_source": "cardiology_protocols.txt"
+  },
+  {
+    "question": "How many beds are in the MedNova Cardiac ICU?",
+    "reference_answer": "The MedNova Cardiology department operates a dedicated Cardiac ICU with 10 beds, along with a 24-hour Chest Pain Unit.",
+    "expected_source": "cardiology_protocols.txt"
+  },
+  {
+    "question": "How are patients triaged in the MedNova Emergency Department?",
+    "reference_answer": "All patients arriving at the ED are triaged within 5 minutes of arrival using a 5-level acuity scale: Level 1 is resuscitation/immediate care, Level 2 is emergent within 10 minutes, Level 3 is urgent within 30 minutes, Level 4 is less urgent within 60 minutes, and Level 5 is non-urgent within 120 minutes.",
+    "expected_source": "emergency_protocols.txt"
+  },
+  {
+    "question": "What is the Code Blue extension number at MedNova?",
+    "reference_answer": "Code Blue is reached at extension 9999. The resuscitation team responds within 2 minutes following current AHA Advanced Cardiac Life Support guidelines.",
+    "expected_source": "emergency_protocols.txt"
+  }
+]

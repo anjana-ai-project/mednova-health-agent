@@ -1,0 +1,224 @@
+{
+  "total": 15,
+  "passed": 14,
+  "pass_rate": 0.9333333333333333,
+  "by_domain": {
+    "patient": {
+      "passed": 4,
+      "total": 4,
+      "pass_rate": 1.0
+    },
+    "pharmacy": {
+      "passed": 4,
+      "total": 4,
+      "pass_rate": 1.0
+    },
+    "bed": {
+      "passed": 3,
+      "total": 4,
+      "pass_rate": 0.75
+    },
+    "scheduling": {
+      "passed": 3,
+      "total": 3,
+      "pass_rate": 1.0
+    }
+  },
+  "results": [
+    {
+      "index": 0,
+      "question": "What ward is patient P002 in?",
+      "domain": "patient",
+      "expected_tool": "get_patient_by_id",
+      "actual_tool": "get_patient_by_id",
+      "tool_match": true,
+      "expected_data_key": "Cardiology",
+      "data_in_answer": true,
+      "status": "PASS",
+      "reason": "tool + data match",
+      "answer_preview": "Patient P002, Meena Sundaram, is currently in the **Cardiology ward**."
+    },
+    {
+      "index": 1,
+      "question": "List all currently admitted patients at MedNova.",
+      "domain": "patient",
+      "expected_tool": "get_all_patients",
+      "actual_tool": "get_all_patients",
+      "tool_match": true,
+      "expected_data_key": "Rajesh Kumar",
+      "data_in_answer": true,
+      "status": "PASS",
+      "reason": "tool + data match",
+      "answer_preview": "# Currently Admitted Patients at MedNova Hospital Chennai  Here are all the patients currently admitted:  | Patient ID | Name | Condition | Assigned Doctor | Ward | |---|---|---|---|---| | P001 | Raj\u2026"
+    },
+    {
+      "index": 2,
+      "question": "Which patients are under Dr. Priya Nair's care?",
+      "domain": "patient",
+      "expected_tool": "get_patients_by_doctor",
+      "actual_tool": "get_patients_by_doctor",
+      "tool_match": true,
+      "expected_data_key": "Rajesh Kumar",
+      "data_in_answer": true,
+      "status": "PASS",
+      "reason": "tool + data match",
+      "answer_preview": "Dr. Priya Nair is currently caring for three patients:  1. **Rajesh Kumar** (P001) - Type 2 Diabetes, General Ward 2. **Vikram Chandran** (P005) - Dengue Fever, General Ward 3. **Deepa Venkat** (P008\u2026"
+    },
+    {
+      "index": 3,
+      "question": "Show me patients in the Cardiology ward.",
+      "domain": "patient",
+      "expected_tool": "get_patients_by_ward",
+      "actual_tool": "get_patients_by_ward",
+      "tool_match": true,
+      "expected_data_key": "Meena Sundaram",
+      "data_in_answer": true,
+      "status": "PASS",
+      "reason": "tool + data match",
+      "answer_preview": "Here are the patients currently in the Cardiology ward at MedNova Hospital Chennai:  1. **Meena Sundaram** (ID: P002)    - Condition: Hypertension    - Doctor: Dr. Arun Menon  2. **Lakshmi Patel** (I\u2026"
+    },
+    {
+      "index": 4,
+      "question": "Get details for medicine M006.",
+      "domain": "pharmacy",
+      "expected_tool": "get_medicine_by_id",
+      "actual_tool": "get_medicine_by_id",
+      "tool_match": true,
+      "expected_data_key": "Insulin Glargine",
+      "data_in_answer": true,
+      "status": "PASS",
+      "reason": "tool + data match",
+      "answer_preview": "# Medicine Details for M006  Here are the details for **Insulin Glargine**:  - **Medicine ID:** M006 - **Category:** Antidiabetic - **Supplier:** Sanofi - **Current Stock:** 80 units - **Price:** \u20b945\u2026"
+    },
+    {
+      "index": 5,
+      "question": "List all antibiotics available at the pharmacy.",
+      "domain": "pharmacy",
+      "expected_tool": "get_medicines_by_category",
+      "actual_tool": "get_medicines_by_category",
+      "tool_match": true,
+      "expected_data_key": "Azithromycin",
+      "data_in_answer": true,
+      "status": "PASS",
+      "reason": "tool + data match",
+      "answer_preview": "# Antibiotics Available at MedNova Hospital Chennai Pharmacy  Based on our current inventory, we have the following antibiotic available:  **Azithromycin 500mg** - **Price:** \u20b918.50 per unit - **Stoc\u2026"
+    },
+    {
+      "index": 6,
+      "question": "Is Insulin Glargine available in stock?",
+      "domain": "pharmacy",
+      "expected_tool": "check_medicine_stock",
+      "actual_tool": "check_medicine_stock",
+      "tool_match": true,
+      "expected_data_key": "Insulin Glargine",
+      "data_in_answer": true,
+      "status": "PASS",
+      "reason": "tool + data match",
+      "answer_preview": "Yes, **Insulin Glargine is available in stock** at MedNova Hospital Chennai!  Here are the details: - **Stock Quantity:** 80 units - **Price:** \u20b9450.0 - **Expiry Date:** September 1, 2026  The medici\u2026"
+    },
+    {
+      "index": 7,
+      "question": "Which medicines are running low on stock?",
+      "domain": "pharmacy",
+      "expected_tool": "get_low_stock_medicines",
+      "actual_tool": "get_low_stock_medicines",
+      "tool_match": true,
+      "expected_data_key": "Salbutamol Inhaler",
+      "data_in_answer": true,
+      "status": "PASS",
+      "reason": "tool + data match",
+      "answer_preview": "Based on our current inventory, here are the medicines running low on stock at MedNova Hospital Chennai:  1. **Insulin Glargine** (M006)    - Current stock: 80 units    - Supplier: Sanofi  2. **Salbu\u2026"
+    },
+    {
+      "index": 8,
+      "question": "What is the status of bed B007?",
+      "domain": "bed",
+      "expected_tool": "get_bed_status",
+      "actual_tool": "get_bed_status",
+      "tool_match": true,
+      "expected_data_key": "Available",
+      "data_in_answer": true,
+      "status": "PASS",
+      "reason": "tool + data match",
+      "answer_preview": "Bed B007 is currently **Available**.   Here are the details: - **Location:** Surgery Ward, Floor 3 (Bed S-301) - **Status:** Ready for patient admission  The bed is unoccupied and ready to use."
+    },
+    {
+      "index": 9,
+      "question": "Show me all currently available beds.",
+      "domain": "bed",
+      "expected_tool": "get_available_beds",
+      "actual_tool": "get_available_beds",
+      "tool_match": true,
+      "expected_data_key": "B002",
+      "data_in_answer": true,
+      "status": "PASS",
+      "reason": "tool + data match",
+      "answer_preview": "# Currently Available Beds at MedNova Hospital Chennai  We currently have **3 beds available**:  1. **General Ward** - Bed G-102 (Floor 1)    - Bed ID: B002  2. **Cardiology Ward** - Bed C-203 (Floor\u2026"
+    },
+    {
+      "index": 10,
+      "question": "List the beds in the Cardiology ward.",
+      "domain": "bed",
+      "expected_tool": "get_beds_by_ward",
+      "actual_tool": "get_beds_by_ward",
+      "tool_match": true,
+      "expected_data_key": "C-201",
+      "data_in_answer": true,
+      "status": "PASS",
+      "reason": "tool + data match",
+      "answer_preview": "Here are the beds in the Cardiology ward at MedNova Hospital Chennai:  1. **Bed C-201** (B004) - Occupied 2. **Bed C-202** (B005) - Occupied 3. **Bed C-203** (B006) - Available  Currently, there is *\u2026"
+    },
+    {
+      "index": 11,
+      "question": "Give me the overall bed occupancy summary for MedNova.",
+      "domain": "bed",
+      "expected_tool": "get_bed_occupancy_summary",
+      "actual_tool": "get_bed_occupancy_summary",
+      "tool_match": true,
+      "expected_data_key": "occupancy_rate",
+      "data_in_answer": false,
+      "status": "FAIL",
+      "reason": "'occupancy_rate' missing from answer",
+      "answer_preview": "# MedNova Hospital Chennai - Bed Occupancy Summary  Here's the current bed occupancy status for MedNova Hospital:  - **Total Beds:** 10 - **Occupied Beds:** 7 - **Available Beds:** 3 - **Occupancy Ra\u2026"
+    },
+    {
+      "index": 12,
+      "question": "What appointments does Dr. Priya Nair have?",
+      "domain": "scheduling",
+      "expected_tool": "get_appointments_by_doctor",
+      "actual_tool": "get_appointments_by_doctor",
+      "tool_match": true,
+      "expected_data_key": "Rajesh Kumar",
+      "data_in_answer": true,
+      "status": "PASS",
+      "reason": "tool + data match",
+      "answer_preview": "Dr. Priya Nair has the following appointments:  1. **May 21, 2026 at 9:00 AM** - Rajesh Kumar (Confirmed) 2. **May 22, 2026 at 2:00 PM** - Vikram Chandran (Pending) 3. **May 23, 2026 at 9:30 AM** - D\u2026"
+    },
+    {
+      "index": 13,
+      "question": "Show appointments scheduled on 2026-05-21.",
+      "domain": "scheduling",
+      "expected_tool": "get_appointments_by_date",
+      "actual_tool": "get_appointments_by_date",
+      "tool_match": true,
+      "expected_data_key": "Rajesh Kumar",
+      "data_in_answer": true,
+      "status": "PASS",
+      "reason": "tool + data match",
+      "answer_preview": "Here are the appointments scheduled for **May 21, 2026** at MedNova Hospital Chennai:  1. **Appointment A001**    - Patient: Rajesh Kumar    - Doctor: Dr. Priya Nair    - Time: 09:00 AM    - Status: \u2026"
+    },
+    {
+      "index": 14,
+      "question": "What appointment slots are currently available for booking?",
+      "domain": "scheduling",
+      "expected_tool": "get_available_slots",
+      "actual_tool": "get_available_slots",
+      "tool_match": true,
+      "expected_data_key": "Dr. Arun Menon",
+      "data_in_answer": true,
+      "status": "PASS",
+      "reason": "tool + data match",
+      "answer_preview": "Great! We currently have **2 appointment slots** available for booking at MedNova Hospital Chennai:  1. **Cardiology Appointment**    - Doctor: Dr. Arun Menon    - Date: May 23, 2026    - Time: 3:00 \u2026"
+    }
+  ]
+}

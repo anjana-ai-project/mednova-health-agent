@@ -272,3 +272,18 @@ def get_appointments_by_patient(patient_name: str) -> list:
         {"appointment_id": r[0], "doctor": r[2], "date": r[4], "time": r[5], "status": r[6]}
         for r in rows
     ]
+
+
+def book_appointment(appointment_id: str, patient_name: str) -> dict:
+    """Book an available appointment slot for a patient."""
+    conn = sqlite3.connect(SCHEDULING_DB)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM appointments WHERE appointment_id = ? AND status = 'Available'", (appointment_id,))
+    row = cursor.fetchone()
+    if not row:
+        conn.close()
+        return {"error": f"Appointment {appointment_id} is not available for booking"}
+    cursor.execute("UPDATE appointments SET status = 'Confirmed', patient_name = ? WHERE appointment_id = ?", (patient_name, appointment_id))
+    conn.commit()
+    conn.close()
+    return {"success": True, "appointment_id": appointment_id, "patient_name": patient_name, "status": "Confirmed"}
