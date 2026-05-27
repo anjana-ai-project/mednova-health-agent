@@ -62,14 +62,14 @@ mednova-health-agent/
 
 - [x] Step 1 — GitHub repo created
 - [x] Step 2 — venv + folder structure ready
-- [ ] Step 3 — Build 4 SQLite mock databases
-- [ ] Step 4 — Build 4 FastMCP servers
-- [ ] Step 5 — Copy + enrich RAG engine
-- [ ] Step 6 — Build 5 LangGraph agents
-- [ ] Step 7 — Build Orchestrator Agent
-- [ ] Step 8 — Build Evaluator Agent
-- [ ] Step 9 — Build Streamlit UI
-- [ ] Step 10 — Deploy to Streamlit Cloud
+- [x] Step 3 — Build 4 SQLite mock databases
+- [x] Step 4 — Build 4 FastMCP servers
+- [x] Step 5 — Copy + enrich RAG engine
+- [x] Step 6 — Build 5 LangGraph agents
+- [x] Step 7 — Build Orchestrator Agent
+- [x] Step 8 — Build Evaluator Agent
+- [x] Step 9 — Build Streamlit UI
+- [x] Step 10 — Deploy to Streamlit Cloud
 
 ---
 
