@@ -98,7 +98,7 @@ def run_turn(state: MedNovaState) -> MedNovaState:
         model=MODEL,
         max_tokens=512,
         tools=ALL_TOOLS,
-        tool_choice={"type": "any"},
+        tool_choice={"type": "auto"},
         system=(
             "You are the routing brain for MedNova Hospital Chennai's AI assistant. "
             "Given the user's current message and the recent conversation history, "
